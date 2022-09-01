@@ -28,7 +28,6 @@ const Dashboard = (props) => {
   const [users, setUsers] = useState([]);
   const [createUserModal, toggleCreateUserModal] = useState(false);
   const [updateUserModal, toggleUpdateUserModal] = useState(false);
-  const [notificationModal, toggleNotificationModal] = useState(false);
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -45,10 +44,6 @@ const Dashboard = (props) => {
   const [cardPin, setCardPin] = useState("");
 
   const [updateId, setUpdateId] = useState("");
-
-  const [notificationHeader, setNotificationHeader] = useState("");
-  const [notificationBody, setNotificationBody] = useState("");
-  const [notificationId, setNotificationId] = useState("");
 
   const [tfn, setTfn] = useState("");
   const [tfnId, setTfnId] = useState("");
@@ -72,18 +67,6 @@ const Dashboard = (props) => {
         })
         .catch((err) => {
           console.log(err);
-        });
-
-      axios
-        .get("/notification")
-        .then((res) => {
-          setNotificationHeader(res.data[0].header);
-          setNotificationBody(res.data[0].body);
-          setNotificationId(res.data[0]._id);
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
         });
 
       axios
@@ -193,22 +176,6 @@ const Dashboard = (props) => {
       })
       .catch((err) => {
         console.log(err);
-      });
-  };
-
-  const updateNotifications = () => {
-    axios
-      .put("/notification", {
-        header: notificationHeader,
-        body: notificationBody,
-        notificationid: notificationId,
-      })
-      .then((res) => {
-        message.success("Notification updated !");
-        toggleNotificationModal(false);
-      })
-      .catch((err) => {
-        message.error("Can't update !");
       });
   };
 
@@ -582,37 +549,6 @@ const Dashboard = (props) => {
         <Button onClick={updateUser}>Update</Button>
       </Modal>
 
-      {/* notification modal */}
-      <Modal
-        title="Notification"
-        centered
-        footer={null}
-        visible={notificationModal}
-        onOk={() => toggleNotificationModal(false)}
-        onCancel={() => toggleNotificationModal(false)}
-      >
-        <p>Notification details</p>
-        <br />
-
-        <Input
-          type="text"
-          value={notificationHeader}
-          onChange={(e) => setNotificationHeader(e.target.value)}
-          placeholder="Notification Header"
-        />
-        <br />
-        <br />
-        <Input
-          type="text"
-          value={notificationBody}
-          onChange={(e) => setNotificationBody(e.target.value)}
-          placeholder="Notification Body"
-        />
-        <br />
-        <br />
-        <Button onClick={updateNotifications}>Update</Button>
-      </Modal>
-
       {/* phone modal */}
       <Modal
         title="Current TFN"
@@ -648,13 +584,6 @@ const Dashboard = (props) => {
           style={{ marginRight: "10px" }}
         >
           Create user
-        </Button>
-
-        <Button
-          style={{ marginRight: "10px" }}
-          onClick={() => toggleNotificationModal(true)}
-        >
-          View Notification
         </Button>
 
         <Button
